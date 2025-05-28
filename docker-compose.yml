@@ -1,0 +1,44 @@
+services:
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  data-generator:
+    build: ./data_generator
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+
+  anomaly-detector:
+    build: ./anomaly_detector
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+
+  summary-generator:
+    build: ./summary_generator
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      OPENAI_API_BASE: http://host.docker.internal:8008/v1
+      OPENAI_API_KEY: "unknown"
+      SUMMARY_INTERVAL: 120
+
+volumes:
+  redis_data:
+  models:

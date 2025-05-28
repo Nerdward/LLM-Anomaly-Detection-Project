@@ -1,0 +1,5 @@
+langchain==0.3.25
+langchain-community==0.3.24
+langchain-openai==0.3.18
+redis==6.1.0
+python-dotenv==1.1.0
